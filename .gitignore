@@ -8,7 +8,6 @@ tinybasic64.dll
 tinybasic64.a
 tinybasic64.lib
 tinybasic64-test-*
-*.exe
 *.o
 *.obj
 *.lst
