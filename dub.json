@@ -1,0 +1,12 @@
+{
+	"name": "tinybasic64",
+	"authors": [
+		"Csaba Fekete"
+	],
+	"dependencies": {
+		"pegged": "~>0.4.4"
+	},
+	"description": "A Tiny Basic cross compiler for the Commodore-64",
+	"copyright": "Copyright © 2018, Csaba Fekete",
+	"license": "proprietary"
+}

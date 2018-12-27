@@ -1,0 +1,14 @@
+.dub
+docs.json
+__dummy.html
+docs/
+tinybasic64.so
+tinybasic64.dylib
+tinybasic64.dll
+tinybasic64.a
+tinybasic64.lib
+tinybasic64-test-*
+*.exe
+*.o
+*.obj
+*.lst
