@@ -245,7 +245,7 @@ class Program
 
     void error(string error_message)
     {
-        ulong error_location = this.current_node.begin;
+        ulong error_location = to!uint(this.current_node.begin);
         string partial = this.current_node.input[0..error_location];
         auto lines = splitLines(partial);
         ulong line_no = lines.length + 1;
