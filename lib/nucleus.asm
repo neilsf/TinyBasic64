@@ -1,11 +1,19 @@
 
 reserved0	EQU $fb
 reserved1	EQU $fc
+
 reserved2	EQU $fd
 reserved3	EQU $fe
-reserved4	EQU $ff
-reserved5	EQU $07
-reserved6	EQU $08
+
+reserved4	EQU $02
+reserved5	EQU $03
+
+reserved6	EQU $04
+reserved7	EQU $05
+
+reserved8	EQU $06
+reserved9	EQU $07
+
 
 stack 		EQU $0100
 
@@ -593,14 +601,52 @@ NUCL_DIV8	SUBROUTINE
 	inc.wx stack+1
 	ENDM
 
+	; Divide integers on stack
+	MAC divw
+	lda reserved0
+	bne .ok
+	lda reserved1
+	bne .ok
+	lda #<err_divzero
+	pha
+	lda #>err_divzero
+	pha
+	jmp RUNTIME_ERROR
+.ok
+	plw2var reserved0
+	plw2var reserved2
+	jsr NUCL_DIV16
+	pwvar reserved2
+	ENDM
+
+NUCL_DIV16	SUBROUTINE
+	ldx #$00
+	lda reserved2+1
+	bpl .skip
+	twoscomplement reserved2
+	inx
+.skip
+	lda reserved0+1		
+	bpl .skip2
+	twoscomplement reserved0
+	inx
+.skip2
+	txa
+	pha
+	jsr NUCL_DIVU16
+	pla
+	and #$01
+	beq .q
+	twoscomplement reserved2
+.q	rts
 
 	; 16 bit division routine
 	; Author: unknown
 	
-NUCL_DIV16 SUBROUTINE
+NUCL_DIVU16 SUBROUTINE
 .divisor 	EQU reserved0
 .dividend 	EQU reserved2
-.remainder 	EQU reserved5
+.remainder 	EQU reserved4
 .result 	EQU .dividend ; save memory by reusing divident to store the result
 
 	lda #0	        ;preset remainder to 0
@@ -651,3 +697,26 @@ NUCL_DIV16 SUBROUTINE
 	pha
 	pzero
 	ENDM
+
+; init program: save stack pointer
+	MAC init_program
+	tsx
+	stx RESERVED_STACK_POINTER
+	ENDM
+
+; end program: restorre stack pointer and exit
+	MAC halt
+	ldx RESERVED_STACK_POINTER
+	txs
+	rts
+	ENDM
+
+err_divzero HEX 44 49 56 49 53 49 4F 4E 20 42 59 20 5A 45 52 4F 00
+
+RUNTIME_ERROR	SUBROUTINE
+	pla
+    tay
+    pla
+    jsr STDLIB_PRINT
+    halt
+	

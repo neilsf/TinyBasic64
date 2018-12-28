@@ -4,19 +4,6 @@ INPUT_MAXCHARS EQU $06
 
 RESERVED_STACK_POINTER DC.B 0
 
-; init program: save stack pointer
-	MAC init_program
-	tsx
-	stx RESERVED_STACK_POINTER
-	ENDM
-
-; end program: restorre stack pointer and exit
-	MAC halt
-	ldx RESERVED_STACK_POINTER
-	txs
-	rts
-	ENDM
-
 ; setup default mem layout for xprom runtime environment
 STDLIB_MEMSETUP SUBROUTINE
 	lda #$36
@@ -103,7 +90,7 @@ STDLIB_PRINT_WORD SUBROUTINE
 	tya
 	pha
 
-	jsr NUCL_DIV16
+	jsr NUCL_DIVU16
 	
 	pla
 	tay
@@ -117,13 +104,13 @@ STDLIB_PRINT_WORD SUBROUTINE
 	iny	
 	cpy #$08	
 	beq .end	
-	lda reserved5
+	lda reserved4
 	sta reserved2
-	lda reserved5+1
+	lda reserved4+1
 	sta reserved2+1
 	jmp .loop	
 .end:
-	lda reserved5
+	lda reserved4
 	clc
 	adc #$30
 	jsr KERNAL_PRINTCHR
