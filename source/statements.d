@@ -46,6 +46,10 @@ Stmt StmtFactory(ParseTree node, Program program) {
             stmt = new Poke_stmt(node, program);
         break;
 
+         case "TINYBASIC.Input_stmt":
+            stmt = new Input_stmt(node, program);
+        break;
+
         default:
         assert(0);
     }
@@ -276,5 +280,27 @@ class Poke_stmt:Stmt
         this.program.program_segment ~= to!string(Ex1); // address last
 
         this.program.program_segment~="\tpoke\n";
+    }
+}
+
+class Input_stmt:Stmt
+{
+    mixin StmtConstructor;
+
+    void process()
+    {
+        ParseTree list = this.node.children[0].children[0];
+        for(char i=0; i< list.children.length; i++) {
+            ParseTree v = list.children[i];
+            string varname = join(v.children[0].matches);
+            char vartype = this.program.type_conv(v.children[1].matches[0]);
+            if(!this.program.is_variable(varname)) {
+                this.program.variables ~= Variable(0, varname, vartype);
+            }
+            Variable var = this.program.findVariable(varname);
+        
+            this.program.program_segment~="\tinput\n";
+            this.program.program_segment~="\tplw2var " ~ var.getLabel() ~ "\n";
+        }
     }
 }
