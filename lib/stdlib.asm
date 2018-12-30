@@ -69,8 +69,8 @@ STDLIB_PRINT_WORD SUBROUTINE
 	lda #>.tt
     sta $70         ; store dividend_ptr_hb
 	
-	;sta reserved2
-	;sty reserved2+1
+	lda #$00
+	sta reserved6	; has a non-zero char been printed?
 	
 	lda reserved2+1
 	bpl .skip1
@@ -92,15 +92,15 @@ STDLIB_PRINT_WORD SUBROUTINE
 
 	jsr NUCL_DIVU16
 	
+	lda reserved2
+	ora reserved6
+	beq .skip
+	inc reserved6
+	lda reserved2
+	jsr STDLIB_PRINT_BYTE
+.skip:
 	pla
 	tay
-	
-	lda reserved2
-	beq .skip
-	clc
-	adc #$30
-	jsr KERNAL_PRINTCHR
-.skip:
 	iny	
 	cpy #$08	
 	beq .end	
