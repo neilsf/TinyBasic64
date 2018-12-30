@@ -10,7 +10,7 @@ This project is still in beta. Please report any bugs that you may have found an
 1. Pick a pre-built executable from the `bin/` dir and copy it to the project dir or type `dub build` to compile from source (install dub first).
 2. In the project dir type `./tinybasic64 source.bas > target.asm` to compile basic source code to assembly source.
 
-## Rules put short
+## Brief rules
 - 16-bit signed integers only
 - only one statement per line
 - no string type variables (string constants are supported)
