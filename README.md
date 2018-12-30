@@ -10,6 +10,12 @@ This project is still in beta. Please report any bugs that you may have found an
 1. Pick a pre-built executable from the `bin/` dir and copy it to the project dir or type `dub build` to compile from source (install dub first).
 2. In the project dir type `./tinybasic64 source.bas > target.asm` to compile basic source code to assembly source.
 
+## Rules put short
+- 16-bit signed integers only
+- only one statement per line
+- no string type variables (string constants are supported)
+- no arrays
+
 ## Differences in syntax
 There are a few differences to the original gramamar definition ([read Tiny BASIC on Wikipedia](https://en.wikipedia.org/wiki/Tiny_BASIC)):
 1. Keywords are in lowercase.
